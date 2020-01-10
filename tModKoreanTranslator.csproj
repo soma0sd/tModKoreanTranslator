@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\references\tModLoader.targets" />
+  <PropertyGroup>
+    <AssemblyName>tModKoreanTranslator</AssemblyName>
+    <TargetFramework>net45</TargetFramework>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <Target Name="BuildMod" AfterTargets="Build">
+    <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
+  </Target>
+  <ItemGroup>
+    <None Remove="Localization\Terraria.Localization.Content.en-US.Game.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.Items.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.Legacy.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.NPCs.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.Projectiles.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.tModLoader.json" />
+    <None Remove="Localization\Terraria.Localization.Content.en-US.Town.json" />
+  </ItemGroup>
+</Project>

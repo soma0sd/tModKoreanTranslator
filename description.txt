@@ -1,0 +1,5 @@
+
+tMod [c/FFAAAA:Kor][c/AAAAFF:ean][c/FFFF88:Translator] is Support for Terraria MOD localization.
+
+[c/FF4444:important]: If the message is displayed as "***", a font for localization is required.
+
