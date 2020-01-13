@@ -48,7 +48,7 @@ namespace tModKoreanTranslator
             if (File.Exists(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.mkt")) && !ModContent.GetInstance<Config>().TranslatorMode)
             {
                 this.active = true;
-                this.meta = new MKTModMeta(MKTCore.LoadJSON(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.mkt")).Value<JObject>("meta"));
+                this.meta = new MKTModMeta(MKTCore.LoadJSON(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.mkt"), true).Value<JObject>("meta"));
                 Load();
             }
             else if (File.Exists(Path.Combine(path, "_Meta.json")))
