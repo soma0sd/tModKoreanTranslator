@@ -45,10 +45,10 @@ namespace tModKoreanTranslator
                     // 실패시 수동변경
                 }
             }
-            if (File.Exists(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.json")) && !ModContent.GetInstance<Config>().TranslatorMode)
+            if (File.Exists(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.mkt")) && !ModContent.GetInstance<Config>().TranslatorMode)
             {
                 this.active = true;
-                this.meta = new MKTModMeta(MKTCore.LoadJSON(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.json")).Value<JObject>("meta"));
+                this.meta = new MKTModMeta(MKTCore.LoadJSON(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.mkt")).Value<JObject>("meta"));
                 Load();
             }
             else if (File.Exists(Path.Combine(path, "_Meta.json")))
@@ -159,6 +159,7 @@ namespace tModKoreanTranslator
             JObject comp = new JObject();
             foreach (KeyValuePair<string, JToken> p1 in json)
             {
+                if (p1.Key.StartsWith("_")) continue;
                 if (translations)
                 {
                     if (p1.Value.Value<string>("ko").Length > 0)

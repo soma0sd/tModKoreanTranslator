@@ -11,13 +11,13 @@
 		Size is a float value, measured in points. Modify this value to change
 		the size of the font.
 		-->
-		<Size>14</Size>
+		<Size>17</Size>
 		
 		<!--
 		Spacing is a float value, measured in pixels. Modify this value to change
 		the amount of spacing in between characters.
 		-->
-		<Spacing>17</Spacing>
+		<Spacing>0</Spacing>
 		
 		<!--
 		UseKerning controls the layout of the font. If this value is true, kerning information

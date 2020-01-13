@@ -20,7 +20,10 @@ namespace tModKoreanTranslator
                 MKTModMeta meta = mktmod.meta;
                 if (mktmod.active)
                 {
-                    Main.NewText($"{meta.name} {meta.modVersion.ToString()}", 243, 229, 245);
+                    string credit = "";
+                    if (meta.translator.Length > 0) credit += $"번역: {meta.translator} ";
+                    if (meta.inspector.Length > 0) credit += $"검수: {meta.inspector}";
+                    Main.NewText($"{meta.name} {meta.modVersion.ToString()} {credit}", 243, 229, 245);
                     if (ModContent.GetInstance<Config>().TranslatorMode)
                     {
                         // 번역자 모드가 켜져있는 경우
