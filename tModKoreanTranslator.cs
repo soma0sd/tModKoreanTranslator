@@ -1,80 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.ComponentModel;
 using System.IO;
-using System.Text;
+using System.Collections.Generic;
+
+using ReLogic.Graphics;
+
 using Terraria;
-using Terraria.Localization;
 using Terraria.ModLoader;
-using Terraria.ModLoader.Config;
-using Terraria.ModLoader.Core;
 
 
 namespace tModKoreanTranslator
 {
     class tModKoreanTranslator : Mod
     {
+        /* 모드 객체
+         * 
+         * (tModKoreanTranslator) instance: Load() 이후의 클래스 참조
+         * (string) translatorPath: 모드 번역파일 경로
+         */
         public static tModKoreanTranslator instance;
-        public List<MKTMOD> MKTmods;
+        public List<MKTMod> MKTmods;
+
+        public tModKoreanTranslator() { }
+        public override bool LoadResource(string path, int length, Func<Stream> getStream)
+        {
+            // 설정에 따라 폰트를 로드
+            string extension = Path.GetExtension(path).ToLower();
+            if (extension == ".xnb" && path.StartsWith("Fonts/"))
+            {
+                if (ModContent.GetInstance<Config>().FontChage)
+                {
+                    return base.LoadResource(path, length, getStream);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return base.LoadResource(path, length, getStream);
+            }
+        }
         public override void Load()
         {
-            Directory.CreateDirectory(Path.Combine(Main.SavePath, "Korean Localization"));
+            // 모드 초기화
             instance = this;
-            MKTmods = new List<MKTMOD>();
-            if (ModContent.GetInstance<Config>().TerrariaPatcherDefault)
-            {
-                LanguageManager languageManager = LanguageManager.Instance;
-                foreach (TmodFile.FileEntry item in
-                            typeof(Mod)
-                            .GetProperty("File", BindingFlags.NonPublic | BindingFlags.Instance)
-                            .GetValue(this) as TmodFile)
-                {
-                    if (Path.GetFileNameWithoutExtension(item.Name).StartsWith("ztnc.Terraria.Localization.Content") && item.Name.EndsWith(".json"))
-                    {
-                        try
-                        {
-                            languageManager.LoadLanguageFromFileText(Encoding.UTF8.GetString(GetFileBytes(item.Name)));
-                        }
-                        catch
-                        {
-                            Logger.InfoFormat("Failed to load language file: " + item);
-                        }
-                    }
-                }
-                //ModLanguageManager manager = new ModLanguageManager(this);
-                //foreach (LocalizedText localized in LanguageManager.Instance.FindAll(new Regex(".+")))
-                //{
-                //    string[] key = localized.Key.Split('.');
-                //    manager.Add(key[1], key[0], localized.Value, true);
-                //}
-                //manager.DumpTo("Terraria");
+            Directory.CreateDirectory(MKTCore.translatorPath);
+            if (ModContent.GetInstance<Config>().FontChage) {
+                DynamicSpriteFont MKTPFontMouse = GetFont("Fonts/MKT_MouseText");
+                DynamicSpriteFont MKTPItemStack = GetFont("Fonts/MKT_ItemStack");
+                DynamicSpriteFont MKTFontDeath = GetFont("Fonts/MKT_DeathText");
+                Main.fontMouseText = MKTPFontMouse; // 툴팁, 채팅
+                Main.fontItemStack = MKTPItemStack; // 업적, UI 제목
+                Main.fontDeathText = MKTFontDeath;  // 타이틀 메뉴
+                //Main.fontCombatText[0] = MKTPFontMouse;
+                //Main.fontCombatText[1] = MKTPFontMouse;
             }
+
+            // 설치한 모드 탐색
+            this.MKTmods = new List<MKTMod>();
             foreach (Mod mod in ModLoader.Mods)
             {
                 if (mod.Name == "ModLoader") continue;
-                if (mod.Name == "tModKoreanTranslator") continue;
-                if (Directory.Exists(Path.Combine(Main.SavePath, "Korean Localization", mod.Name)))
-                {
-                    MKTMOD MKTmod = new MKTMOD(mod).Load();
-                    MKTmods.Add(MKTmod);
-                }
+                if (mod.Name == this.Name) continue;
+                this.MKTmods.Add(new MKTMod(mod));
             }
+
+            // 클라이언트 번역
+            if (ModContent.GetInstance<Config>().TerrariaPatcher) new MKTTerraria();
         }
-    }
-    class Config : ModConfig
-    {
-        public override ConfigScope Mode => ConfigScope.ClientSide;
-
-        [DefaultValue(false)]
-        [Label("Translator Mode")]
-        [Tooltip("Translate File Dump and Update")]
-        public bool TranslatorModeDefault { get; set; }
-
-        [DefaultValue(false)]
-        [Label("Terraria Patcher")]
-        [Tooltip("Terraria & tModLoader Text Translate")]
-        public bool TerrariaPatcherDefault { get; set; }
+        public override void Unload()
+        {
+            instance = null;
+            MKTmods = null;
+        }
     }
 }

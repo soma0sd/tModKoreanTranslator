@@ -1,10 +1,7 @@
-﻿using System.IO;
-
-using Newtonsoft.Json.Linq;
+﻿using System.Collections.Generic;
 
 using Terraria;
 using Terraria.ModLoader;
-
 
 namespace tModKoreanTranslator
 {
@@ -12,34 +9,46 @@ namespace tModKoreanTranslator
     {
         public override void OnEnterWorld(Player player)
         {
-            tModKoreanTranslator core = tModKoreanTranslator.instance;
-            Main.NewText("통합 모드 번역 모드", 121, 134, 203, false);
-            bool translateMode = ModContent.GetInstance<Config>().TranslatorModeDefault;
-            if (ModContent.GetInstance<Config>().TerrariaPatcherDefault)
+            if (ModContent.GetInstance<Config>().TerrariaPatcher)
             {
-                Main.NewText(@"클라이언트 번역: 테라리안 in Naver (https://cafe.naver.com/ztnc)", 121, 134, 203, false);
+                Main.NewText($"클라이언트 번역 제공: 테라리안 in Naver", 243, 229, 245);
+                Main.NewText($"           https://cafe.naver.com/ztnc", 243, 229, 245);
             }
-
-            if (translateMode) Main.NewText("번역자 모드 활성화", 121, 134, 203, false);
-            Main.NewText("", 121, 134, 203, false);
-            foreach (MKTMOD MKTmod in core.MKTmods)
+            List<MKTMod> MKTmods = tModKoreanTranslator.instance.MKTmods;
+            foreach (MKTMod mktmod in MKTmods)
             {
-                if (MKTmod.Translator.Length == 0 && MKTmod.Inspector.Length == 0) Main.NewText($"[{MKTmod.DisplayName} v{MKTmod.Version}]", 159, 168, 218, false);
-                if (MKTmod.Translator.Length > 0 && MKTmod.Inspector.Length == 0) Main.NewText($"[{MKTmod.DisplayName} v{MKTmod.Version}] 번역: {MKTmod.Translator}", 159, 168, 218, false);
-                if (MKTmod.Translator.Length > 0 && MKTmod.Inspector.Length > 0) Main.NewText($"[{MKTmod.DisplayName} v{MKTmod.Version}] 번역: {MKTmod.Translator}, 검수: {MKTmod.Inspector}", 159, 168, 218, false);
-                if (MKTmod.mod.Version.ToString() != MKTmod.Version)
-                    Main.NewText($"모드 {MKTmod.mod.DisplayName} v{MKTmod.mod.Version.ToString()}의 번역파일 버전이 v{MKTmod.Version}입니다 ", 159, 168, 218, false);
-            }
-            if (translateMode)
-            {
-                foreach (Mod mod in ModLoader.Mods)
+                MKTModMeta meta = mktmod.meta;
+                if (mktmod.active)
                 {
-                    if (mod.Name == "ModLoader") continue;
-                    if (mod.Name == "tModKoreanTranslator") continue;
-                    if (!Directory.Exists(Path.Combine(Main.SavePath, "Korean Localization", mod.Name)))
+                    Main.NewText($"{meta.name} {meta.modVersion.ToString()}", 243, 229, 245);
+                    if (ModContent.GetInstance<Config>().TranslatorMode)
                     {
-                        new MKTMOD(mod).Dump();
-                        Main.NewText($"(번역자 모드) [{mod.DisplayName} v{mod.Version.ToString()}] 새로운 번역 파일 생성", 159, 168, 218, false);
+                        // 번역자 모드가 켜져있는 경우
+                        mktmod.update(); // debug
+                        // 번역파일을 업데이트
+                        if (mktmod.version.CompareTo(meta.modVersion) > 0)
+                        {
+                            mktmod.update();
+                            Main.NewText($"   {meta.modVersion.ToString()} => {mktmod.version.ToString()} 업데이트 했습니다.", 243, 229, 245);
+                        }
+                        else if (mktmod.version.CompareTo(meta.modVersion) < 0)
+                        {
+                            Main.NewText($"   모드가 번역파일보다 구버전입니다.", 243, 229, 245);
+                        }
+                        else
+                        {
+                            Main.NewText($"    번역파일과 동일한 버전입니다.", 243, 229, 245);
+                        }
+                    }
+                }
+                else
+                {
+                    if (ModContent.GetInstance<Config>().TranslatorMode)
+                    {
+                        // 번역자 모드가 켜져있는 경우
+                        // 번역파일이 없는 모드의 원시 번역파일 생성
+                        mktmod.dump();
+                        Main.NewText($"{meta.name}의 번역파일을 생성", 243, 229, 245);
                     }
                 }
             }

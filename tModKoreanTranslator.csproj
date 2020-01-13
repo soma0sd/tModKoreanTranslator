@@ -11,13 +11,12 @@
     <Exec Command="&quot;$(tMLBuildServerPath)&quot; -build $(ProjectDir) -eac $(TargetPath) -define $(DefineConstants) -unsafe $(AllowUnsafeBlocks)" />
   </Target>
   <ItemGroup>
-    <None Remove="Localization\Terraria.Localization.Content.en-US.Game.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.Items.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.Legacy.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.NPCs.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.Projectiles.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.tModLoader.json" />
-    <None Remove="Localization\Terraria.Localization.Content.en-US.Town.json" />
+    <None Remove="Fonts\DynamicFontGenerator.exe" />
+    <None Remove="Fonts\DynamicFontGenerator.pdb" />
+    <None Remove="Fonts\Microsoft.Xna.Framework.Content.Pipeline.dll" />
+    <None Remove="Fonts\Microsoft.Xna.Framework.dll" />
+    <None Remove="Fonts\Microsoft.Xna.Framework.Game.dll" />
+    <None Remove="Fonts\Microsoft.Xna.Framework.Graphics.dll" />
+    <None Remove="Fonts\ReLogic.Content.Pipeline.dll" />
   </ItemGroup>
 </Project>

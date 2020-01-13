@@ -1,3 +1,14 @@
+# Environment Dir
+.vs/
+backup/
+
+# Build Dir
 bin/
 obj/
-.vs/
+
+# Fonts Generator
+# https://forums.terraria.org/index.php?threads/dynamicspritefontgenerator-0-4-generate-fonts-without-xna-game-studio.57127/
+Fonts/DynamicFontGenerator.exe
+Fonts/*.xnb
+Fonts/*.dll
+Fonts/*.pdb
