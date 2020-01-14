@@ -114,11 +114,14 @@ namespace tModKoreanTranslator
         {
             // 번역파일 로드
             JObject json = MKTCore.LoadJSON(Path.Combine(MKTCore.translatorPath, $"{mod.Name}.mkt"), true);
-            foreach (KeyValuePair<string, JToken> pair in json.Value<JObject>("items"))
+            if (json["items"] != null)
             {
-                ModTranslation translation = mod.CreateTranslation(pair.Key);
-                translation.AddTranslation(Language.ActiveCulture, pair.Value.ToObject<string>());
-                mod.AddTranslation(translation);
+                foreach (KeyValuePair<string, JToken> pair in json.Value<JObject>("items"))
+                {
+                    ModTranslation translation = mod.CreateTranslation(pair.Key);
+                    translation.AddTranslation(Language.ActiveCulture, pair.Value.ToObject<string>());
+                    mod.AddTranslation(translation);
+                }
             }
         }
         public void Compile()
