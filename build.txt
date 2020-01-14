@@ -1,6 +1,6 @@
 displayName = [c/FFFF88:tMod ][c/FFAAAA:Kor][c/AAAAFF:ean][c/FFFF88: Translator]
 author = soma0sd
 homepage = https://soma0sd.tistory.com/148
-version = 0.4.1
+version = 0.4.2
 includeSource = false
 includePDB = true

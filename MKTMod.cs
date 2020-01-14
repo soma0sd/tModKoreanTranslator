@@ -127,7 +127,8 @@ namespace tModKoreanTranslator
             JObject json = new JObject();
             string[] itemFiles = new string[] { "Items.json", "Prefixes.json", "NPCs.json", "Buffs.json" };
             json.Add("meta", MKTCore.LoadJSON(Path.Combine(path, "_Meta.json")));
-            json.Add("items", CompJSON(MKTCore.LoadJSON(Path.Combine(path, "Translations.json")), true));
+            if(File.Exists(Path.Combine(path, "Translations.json")))
+                json.Add("items", CompJSON(MKTCore.LoadJSON(Path.Combine(path, "Translations.json")), true));
             foreach (string file in itemFiles)
             {
                 if (File.Exists(Path.Combine(path, file)))
